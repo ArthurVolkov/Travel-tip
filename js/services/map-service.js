@@ -40,10 +40,10 @@ function getLocByName(locName) {
 
 function createLoc(loc) {
     return {
-        id: makeId(),
+        id: utilService.makeId(),
         name: loc.maps.placeName, 
-        lat: loc.maps.placeName.placePos.lat,
-        lng: loc.maps.placeName.placePos.lng,
+        lat: loc.maps.placePos.lat,
+        lng: loc.maps.placePos.lng,
         weather: loc.weather,
         createdAt: Date.now()
     }

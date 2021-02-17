@@ -97,6 +97,29 @@ button {
 }
 
 
+.places-list {
+    width: 100%;
+    padding: 5px;
+    font-size: 1.2em;
+}
+
+.places-list li {
+    background-color: yellowgreen;
+    height: 1.5em;
+    margin: 5px 0;
+}
+
+.places-list .place-btns{
+    height: 100%;
+    width: 3.5em;
+}
+
+.places-list .place-btns button{
+    height: 100%;
+    border-radius: 5px;
+    border: none;
+}
+
 
 /* HELPERS */
 
@@ -118,4 +141,10 @@ button {
 
 .align-center {
     align-items: center;
+}
+
+.clean-list {
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
 }

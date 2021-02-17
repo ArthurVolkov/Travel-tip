@@ -9,6 +9,7 @@ var gMap;
 console.log('Main!');
 
 window.onSearch = onSearch;
+window.onGoTo = onGoTo;
 
 mapService.getLocs()
     .then(locs => console.log('locs', locs))
@@ -20,8 +21,8 @@ window.onload = () => {
         panTo(32.013186, 34.748019);
     })
 
-    // getLocs()
-    //     .then(res => renderLocs(res))
+    mapService.getLocs()
+        .then(res => renderLocs(res))
 
     initMap()
         .then(() => {
@@ -100,7 +101,7 @@ function onSearch(ev) {
             renderLocInfo(place.placeName)
             weather.getWeatherByPos(place.placePos)
                 .then(weather => {
-                    addLoc({
+                    mapService.addLoc({
                         maps: place,
                         weather: {
                             temp: weather.main.temp,
@@ -114,7 +115,7 @@ function onSearch(ev) {
                     //         info: weather.weather[0].description
                     //     },
                     // });
-                    // renderWeather(weather)
+                    renderWeather(weather)
                 })
             // addLocation(place, weater)
         })
@@ -140,6 +141,21 @@ function renderWeather(weather) {
 }
 
 
-function renderLocs(res) {
+function renderLocs(places) {
+    console.log('res locs:', places)
+    document.querySelector('.places-list').innerHTML = places.map(place => {
+        console.log('place:', place.name)
+        return `<li class="flex justify-between align-center">${place.name}
+            <div class="place-btns flex justify-between">
+                <button onclick="onGoTo(${place.name})">Go</button>
+                <button onclick="onRemove(${place.name})">❌</button>
+            </div>
+        </li>`
+    }).join('')
+}
 
+
+function onGoTo(name) {
+    // const place = mapService.getLocByName(name)
+    // console.log('place:', place)
 }
