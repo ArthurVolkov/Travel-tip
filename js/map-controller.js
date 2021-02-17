@@ -20,6 +20,8 @@ window.onload = () => {
         panTo(32.013186, 34.748019);
     })
 
+    // getLocs()
+    //     .then(res => renderLocs(res))
 
     initMap()
         .then(() => {
@@ -93,13 +95,51 @@ function onSearch(ev) {
     let value = document.getElementById('search').value
     console.log('value: ', value);
     geoCoding.getPosByName(value)
-        .then(res => {
-            panTo(res.placePos.lat, res.placePos.lng)
-            renderLocInfo(res.placeName)
-            weather.getWeatherByPos(res.placePos)
+        .then(place => {
+            panTo(place.placePos.lat, place.placePos.lng)
+            renderLocInfo(place.placeName)
+            weather.getWeatherByPos(place.placePos)
+                .then(weather => {
+                    addLoc({
+                        maps: place,
+                        weather: {
+                            temp: weather.main.temp,
+                            info: weather.weather[0].description
+                        }, 
+                    })
+                    // console.log('resss', {
+                    //     maps: place,
+                    //     weather: {
+                    //         temp: weather.main.temp,
+                    //         info: weather.weather[0].description
+                    //     },
+                    // });
+                    // renderWeather(weather)
+                })
+            // addLocation(place, weater)
         })
 }
 
 function renderLocInfo(info) {
     document.querySelector('.to-render-loc-info').innerText = info
+}
+
+function renderWeather(weather) {
+    var elContainer = document.querySelector('.weather-info-container .weather')
+    var strHTML = `<img src="http://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png" alt="icon"/>
+        <div class="weather-row-1">
+            <div class="weather-place"></div>
+            <div class="weather-desc"></div>
+        </div>
+        <div class="weather-row-2">
+            <div class="weather-temp"></div>
+            <div class="weather-temp-diff"></div>
+            <div class="weather-wind"></div>
+        </div>`
+    elContainer.innerHTML = strHTML
+}
+
+
+function renderLocs(res) {
+
 }
