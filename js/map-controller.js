@@ -6,8 +6,6 @@ import { weather } from './services/weather-service.js';
 
 
 var gMap;
-console.log('Main!');
-
 window.onSearch = onSearch;
 window.onGoTo = onGoTo;
 window.onRemove = onRemove;
@@ -31,7 +29,7 @@ window.onload = () => {
         .then(() => {
             getPosition()
                 .then(pos => {
-                    console.log('User position is:', pos.coords);
+                    // console.log('User position is:', pos.coords);
                     panTo(pos.coords.latitude, pos.coords.longitude)
                     addMarker({ lat: pos.coords.latitude, lng: pos.coords.longitude })
                     weather.getWeatherByPos({ lat: pos.coords.latitude, lng: pos.coords.longitude })
@@ -53,16 +51,16 @@ window.onload = () => {
 }
 
 function initMap(lat = 32.0749831, lng = 34.9120554) {
-    console.log('InitMap');
+    // console.log('InitMap');
     return _connectGoogleApi()
         .then(() => {
-            console.log('google available');
+            // console.log('google available');
             gMap = new google.maps.Map(
                 document.querySelector('#map'), {
                 center: { lat, lng },
                 zoom: 15
             })
-            console.log('Map!', gMap);
+            // console.log('Map!', gMap);
         })
 }
 
@@ -82,7 +80,7 @@ function panTo(lat, lng) {
 
 // This function provides a Promise API to the callback-based-api of getCurrentPosition
 function getPosition() {
-    console.log('Getting Pos');
+    // console.log('Getting Pos');
     return new Promise((resolve, reject) => {
         navigator.geolocation.getCurrentPosition(resolve, reject)
     })
@@ -136,12 +134,12 @@ function renderLocInfo(info) {
 function renderWeather(weather) {
     var elContainer = document.querySelector('.weather-info-container .weather')
     var strHTML = `<img src="http://openweathermap.org/img/wn/${weather.weather[0].icon}@2x.png" alt="icon"/>
-        <div class="weather-row-1">
-            <div class="weather-place"></div>
-            <div class="weather-desc"></div>
+        <div class="weather-row-1 flex">
+            <div class="weather-place">${weather.name},&nbsp</div>
+            <div class="weather-desc">${weather.weather[0].description}</div>
         </div>
-        <div class="weather-row-2">
-            <div class="weather-temp"></div>
+        <div class="weather-row-2 flex">
+            <div class="weather-temp">${weather.main.temp}&#176C&nbsp</div>
             <div class="weather-temp-diff"></div>
             <div class="weather-wind"></div>
         </div>`
@@ -152,7 +150,7 @@ function renderWeather(weather) {
 function renderLocs(places) {
     console.log('res locs:', places)
     document.querySelector('.places-list').innerHTML = places.map(place => {
-        console.log('place:', place.name)
+        // console.log('place:', place.name)
         return `<li class="flex justify-between align-center">
             <div class="place-name">${place.name}</div>
             <div class="place-btns flex justify-between">
