@@ -2,10 +2,13 @@
 
 import { geoCoding } from './services/geocoding-service.js';
 import { mapService } from './services/map-service.js';
+import { weather } from './services/weather-service.js';
 
 
 var gMap;
 console.log('Main!');
+
+window.onSearch = onSearch;
 
 mapService.getLocs()
     .then(locs => console.log('locs', locs))
@@ -14,8 +17,9 @@ window.onload = () => {
     geoCoding.getPosByName('tokyo');
     document.querySelector('.btn').addEventListener('click', (ev) => {
         console.log('Aha!', ev.target);
-        panTo(35.6895, 139.6917);
+        panTo(32.013186, 34.748019);
     })
+
 
     initMap()
         .then(() => {
@@ -71,7 +75,7 @@ function getPosition() {
 
 function _connectGoogleApi() {
     if (window.google) return Promise.resolve()
-    const API_KEY = 'AIzaSyAGuxwq8wZl4gxL2ERwdbaBPAb6QQl8z94'; 
+    const API_KEY = 'AIzaSyAGuxwq8wZl4gxL2ERwdbaBPAb6QQl8z94';
     var elGoogleApi = document.createElement('script');
     elGoogleApi.src = `https://maps.googleapis.com/maps/api/js?key=${API_KEY}`;
     elGoogleApi.async = true;
@@ -84,4 +88,18 @@ function _connectGoogleApi() {
 }
 
 
+function onSearch(ev) {
+    ev.preventDefault()
+    let value = document.getElementById('search').value
+    console.log('value: ', value);
+    geoCoding.getPosByName(value)
+        .then(res => {
+            panTo(res.placePos.lat, res.placePos.lng)
+            renderLocInfo(res.placeName)
+            weather.getWeatherByPos(res.placePos)
+        })
+}
 
+function renderLocInfo(info) {
+    document.querySelector('.to-render-loc-info').innerText = info
+}
