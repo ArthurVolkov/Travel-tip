@@ -1,4 +1,7 @@
 'use strict'
+import {utilService} from './util-service.js';
+
+const KEY_DB = 'travelTip';
 
 export const mapService = {
     getLocs

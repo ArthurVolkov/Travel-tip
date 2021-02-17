@@ -2,6 +2,7 @@
 
 import { geoCoding } from './services/geocoding-service.js';
 import { mapService } from './services/map-service.js';
+import { weather } from './services/weather-service.js';
 
 
 var gMap;
@@ -92,7 +93,13 @@ function onSearch(ev) {
     let value = document.getElementById('search').value
     console.log('value: ', value);
     geoCoding.getPosByName(value)
-        // .then(res => console.log('res', res.lat))
-        .then(res => panTo(res.lat, res.lng))
+        .then(res => {
+            panTo(res.placePos.lat, res.placePos.lng)
+            renderLocInfo(res.placeName)
+            weather.getWeatherByPos(res.placePos)
+        })
 }
 
+function renderLocInfo(info) {
+    document.querySelector('.to-render-loc-info').innerText = info
+}
