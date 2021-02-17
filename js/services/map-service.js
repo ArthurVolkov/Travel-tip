@@ -26,9 +26,14 @@ function deleteLocs(locName) {
 }
 
 function addLoc(loc) {
-    var newLoc = createLoc(loc)
-    gLocs.push(newLoc)
-    utilService.saveToStorage(KEY_DB,gLocs);
+    var locIdx = gLocs.findIndex(function (loc) {
+        return loc.maps.placeName === gLocs.name;
+    })
+    if (locIdx === -1){
+        var newLoc = createLoc(loc)
+        gLocs.push(newLoc)
+        utilService.saveToStorage(KEY_DB,gLocs);
+    }
 }
 
 function getLocByName(locName) {
