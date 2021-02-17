@@ -96,22 +96,30 @@ button {
     flex-grow: 1;
 }
 
-
 .places-list {
     width: 100%;
     padding: 5px;
     font-size: 1.2em;
+    overflow: auto;
 }
 
 .places-list li {
     background-color: yellowgreen;
     height: 1.5em;
-    margin: 5px 0;
+    margin: 5px;
+    overflow: hidden;
 }
 
 .places-list .place-btns{
     height: 100%;
     width: 3.5em;
+}
+
+.places-list .place-name{
+    white-space: pre;
+    text-overflow: ellipsis;
+    overflow: hidden;
+
 }
 
 .places-list .place-btns button{
