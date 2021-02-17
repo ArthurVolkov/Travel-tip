@@ -26,7 +26,10 @@ function deleteLocs(locName) {
 }
 
 function addLoc(loc) {
+<<<<<<< HEAD
     debugger;
+=======
+>>>>>>> 5280eecb0713c135646f130abc82948a62cea6ac
     var locIdx = gLocs.findIndex(function (currLoc) {
         return loc.maps.placeName === currLoc.name;
     })

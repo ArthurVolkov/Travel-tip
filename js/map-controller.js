@@ -10,33 +10,46 @@ console.log('Main!');
 
 window.onSearch = onSearch;
 window.onGoTo = onGoTo;
+window.onRemove = onRemove;
+window.onCurrLoc = onCurrLoc;
 
-mapService.getLocs()
-    .then(locs => console.log('locs', locs))
+
+// mapService.getLocs()
+//     .then(locs => console.log('locs', locs))
 
 window.onload = () => {
-    geoCoding.getPosByName('tokyo');
-    document.querySelector('.btn').addEventListener('click', (ev) => {
-        console.log('Aha!', ev.target);
-        panTo(32.013186, 34.748019);
-    })
+    // geoCoding.getPosByName('tokyo');
+    // document.querySelector('.btn').addEventListener('click', (ev) => {
+    //     console.log('Aha!', ev.target);
+    //     panTo(32.013186, 34.748019);
+    // })
 
     mapService.getLocs()
         .then(res => renderLocs(res))
 
     initMap()
         .then(() => {
-            addMarker({ lat: 32.0749831, lng: 34.9120554 });
+            getPosition()
+                .then(pos => {
+                    console.log('User position is:', pos.coords);
+                    panTo(pos.coords.latitude, pos.coords.longitude)
+                    addMarker({ lat: pos.coords.latitude, lng: pos.coords.longitude })
+                    weather.getWeatherByPos({ lat: pos.coords.latitude, lng: pos.coords.longitude })
+                        .then(weather => { renderWeather(weather) })
+                })
+            // addMarker({ lat: 32.0749831, lng: 34.9120554 });
         })
         .catch(() => console.log('INIT MAP ERROR'));
 
-    getPosition()
-        .then(pos => {
-            console.log('User position is:', pos.coords);
-        })
-        .catch(err => {
-            console.log('err!!!', err);
-        })
+    // getPosition()
+    //     .then(pos => {
+    //         console.log('User position is:', pos.coords);
+    //         panTo(pos.coords.latitude, pos.coords.longitude)
+    //         addMarker({lat: pos.coords.latitude, lng: pos.coords.longitude})
+    //     })
+    //     .catch(err => {
+    //         console.log('err!!!', err);
+    //     })
 }
 
 function initMap(lat = 32.0749831, lng = 34.9120554) {
@@ -97,24 +110,20 @@ function onSearch(ev) {
     geoCoding.getPosByName(value)
         .then(place => {
             panTo(place.placePos.lat, place.placePos.lng)
+            addMarker({ lat: place.placePos.lat, lng: place.placePos.lng })
             renderLocInfo(place.placeName)
             weather.getWeatherByPos(place.placePos)
                 .then(weather => {
                     mapService.addLoc({
                         maps: place,
-                        weather: {
-                            temp: weather.main.temp,
-                            info: weather.weather[0].description
-                        }, 
+                        weather,
                     })
-                    // console.log('resss', {
-                    //     maps: place,
-                    //     weather: {
-                    //         temp: weather.main.temp,
-                    //         info: weather.weather[0].description
-                    //     },
-                    // });
                     renderWeather(weather)
+                    mapService.getLocs()
+                        .then(locs => {
+                            renderLocs(locs)
+                            console.log('onSearch locs:', locs)
+                        })
                 })
             // addLocation(place, weater)
         })
@@ -144,7 +153,8 @@ function renderLocs(places) {
     console.log('res locs:', places)
     document.querySelector('.places-list').innerHTML = places.map(place => {
         console.log('place:', place.name)
-        return `<li class="flex justify-between align-center">${place.name}
+        return `<li class="flex justify-between align-center">
+            <div class="place-name">${place.name}</div>
             <div class="place-btns flex justify-between">
                 <button onclick="onGoTo('${place.name}')">Go</button>
                 <button onclick="onRemove('${place.name}')">❌</button>
@@ -155,6 +165,30 @@ function renderLocs(places) {
 
 
 function onGoTo(name) {
-    // const place = mapService.getLocByName(name)
-    // console.log('place:', place)
+    const place = mapService.getLocByName(name)
+    panTo(place.lat, place.lng)
+    addMarker({ lat: place.lat, lng: place.lng })
+
+    renderLocInfo(place.placeName)
+    renderWeather(place.weather)
+}
+
+function onRemove(name) {
+    mapService.deleteLocs(name)
+    mapService.getLocs()
+        .then(locs => {
+            renderLocs(locs)
+        })
+}
+
+
+function onCurrLoc() {
+
+    getPosition()
+        .then(pos => {
+            console.log('User position is:', pos.coords);
+            panTo(pos.coords.latitude, pos.coords.longitude)
+            addMarker({ lat: pos.coords.latitude, lng: pos.coords.longitude })
+        })
+        .catch(() => console.log('INIT MAP ERROR'));
 }
