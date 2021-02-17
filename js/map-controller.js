@@ -100,7 +100,7 @@ function onSearch(ev) {
             renderLocInfo(place.placeName)
             weather.getWeatherByPos(place.placePos)
                 .then(weather => {
-                    addLoc({
+                    mapService.addLoc({
                         maps: place,
                         weather: {
                             temp: weather.main.temp,
@@ -114,7 +114,7 @@ function onSearch(ev) {
                     //         info: weather.weather[0].description
                     //     },
                     // });
-                    // renderWeather(weather)
+                    renderWeather(weather)
                 })
             // addLocation(place, weater)
         })

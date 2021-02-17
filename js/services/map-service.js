@@ -26,9 +26,14 @@ function deleteLocs(locName) {
 }
 
 function addLoc(loc) {
-    var newLoc = createLoc(loc)
-    gLocs.push(newLoc)
-    utilService.saveToStorage(KEY_DB,gLocs);
+    var locIdx = gLocs.findIndex(function (loc) {
+        return loc.maps.placeName === gLocs.name;
+    })
+    if (locIdx === -1){
+        var newLoc = createLoc(loc)
+        gLocs.push(newLoc)
+        utilService.saveToStorage(KEY_DB,gLocs);
+    }
 }
 
 function getLocByName(locName) {
@@ -40,10 +45,10 @@ function getLocByName(locName) {
 
 function createLoc(loc) {
     return {
-        id: makeId(),
+        id: utilService.makeId(),
         name: loc.maps.placeName, 
-        lat: loc.maps.placeName.placePos.lat,
-        lng: loc.maps.placeName.placePos.lng,
+        lat: loc.maps.placePos.lat,
+        lng: loc.maps.placePos.lng,
         weather: loc.weather,
         createdAt: Date.now()
     }
