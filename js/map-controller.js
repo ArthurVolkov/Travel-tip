@@ -90,7 +90,6 @@ function _connectGoogleApi() {
     })
 }
 
-
 function onSearch(ev) {
     ev.preventDefault()
     let value = document.getElementById('search').value
@@ -147,8 +146,8 @@ function renderLocs(places) {
         console.log('place:', place.name)
         return `<li class="flex justify-between align-center">${place.name}
             <div class="place-btns flex justify-between">
-                <button onclick="onGoTo(${place.name})">Go</button>
-                <button onclick="onRemove(${place.name})">❌</button>
+                <button onclick="onGoTo('${place.name}')">Go</button>
+                <button onclick="onRemove('${place.name}')">❌</button>
             </div>
         </li>`
     }).join('')

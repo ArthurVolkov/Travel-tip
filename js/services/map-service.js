@@ -18,16 +18,17 @@ function getLocs() {
 }
 
 function deleteLocs(locName) {
-    var locIdx = gLocs.findIndex(function (loc) {
-        return locName === gLocs.name;
+    var locIdx = gLocs.findIndex(function (currLoc) {
+        return locName === currLoc.name;
     })
     gLocs.splice(locIdx, 1);
     utilService.saveToStorage(KEY_DB,gLocs);
 }
 
 function addLoc(loc) {
-    var locIdx = gLocs.findIndex(function (loc) {
-        return loc.maps.placeName === gLocs.name;
+    debugger;
+    var locIdx = gLocs.findIndex(function (currLoc) {
+        return loc.maps.placeName === currLoc.name;
     })
     if (locIdx === -1){
         var newLoc = createLoc(loc)
