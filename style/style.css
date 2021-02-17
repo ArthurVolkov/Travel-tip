@@ -55,6 +55,7 @@ button {
     height: 100%;
     border: 1px solid white;
     border-radius: 5px; 
+    outline: none;
 }
 
 .search-container button{
