@@ -1,6 +1,8 @@
 'use strict'
 
-import { mapService } from './services/map-service.js'
+import { geoCoding } from './services/geocoding-service.js';
+import { mapService } from './services/map-service.js';
+
 
 var gMap;
 console.log('Main!');
@@ -9,7 +11,7 @@ mapService.getLocs()
     .then(locs => console.log('locs', locs))
 
 window.onload = () => {
-    
+    geoCoding.getPosByName('tokyo');
     document.querySelector('.btn').addEventListener('click', (ev) => {
         console.log('Aha!', ev.target);
         panTo(35.6895, 139.6917);
